@@ -1,0 +1,68 @@
+digraph QuickSort_Variant22 {
+    graph [fontname="Helvetica", fontsize=11, compound=true];
+    node [shape=box, style="rounded", fontname="Helvetica", fontsize=11, margin="0.2,0.1"];
+    edge [fontname="Helvetica", fontsize=10];
+
+    subgraph cluster_main {
+        label = "Основний виклик";
+        color = black;
+        style = rect;
+        
+        root [label="[19, 75, 43, 31, 5, 66, 62, 34, 76]"];
+    }
+
+    subgraph cluster_left {
+        label = "Лівий підмасив";
+        color = black;
+        style = rect;
+        
+        left_node [label="[5]"];
+    }
+
+    subgraph cluster_right {
+        label = "Правий підмасив";
+        color = black;
+        style = rect;
+        
+        right_root [label="[75, 43, 31, 19, 66, 62, 34, 76]"];
+
+        sub_l1 [label="[34, 43, 31, 19, 66, 62]"];
+        sub_r1 [label="[75, 76]"];
+        
+        right_root -> sub_l1 [label="l=1, r=6"];
+        right_root -> sub_r1 [label="l=7, r=8"];
+
+        node_75 [label="[75]"];
+        node_76 [label="[76]"];
+        sub_r1 -> node_75 [label="l=7, r=7"];
+        sub_r1 -> node_76 [label="l=8, r=8"];
+ 
+        sub_l2 [label="[19, 31]"];
+        sub_r2 [label="[43, 34, 66, 62]"];
+        sub_l1 -> sub_l2 [label="l=1, r=2"];
+        sub_l1 -> sub_r2 [label="l=3, r=6"];
+
+        node_19 [label="[19]"];
+        node_31 [label="[31]"];
+        sub_l2 -> node_19 [label="l=1, r=1"];
+        sub_l2 -> node_31 [label="l=2, r=2"];
+ 
+        node_34 [label="[34]"];
+        sub_r3 [label="[43, 66, 62]"];
+        sub_r2 -> node_34 [label="l=3, r=3"];
+        sub_r2 -> sub_r3 [label="l=4, r=6"];
+
+        node_43 [label="[43]"];
+        sub_r4 [label="[66, 62]"];
+        sub_r3 -> node_43 [label="l=4, r=4"];
+        sub_r3 -> sub_r4 [label="l=5, r=6"];
+
+        node_62 [label="[62]"];
+        node_66 [label="[66]"];
+        sub_r4 -> node_62 [label="l=5, r=5"];
+        sub_r4 -> node_66 [label="l=6, r=6"];
+    }
+
+    root -> left_node [label="l=0, r=0"];
+    root -> right_root [label="l=1, r=8"];
+}
