@@ -1,0 +1,130 @@
+digraph MergeSort {
+    node [shape=box, style="filled,rounded", fontname="Helvetica"];
+    
+    subgraph cluster_iterative {
+        label = "а) Ітеративна версія (Merge Sort)";
+        color = lightgrey;
+        node [fillcolor=lightgreen];
+        
+        init_iter [label="Початковий масив\n[19, 75, 43, 31, 5, 66, 62, 34, 76]", fillcolor=orange];
+        
+        // Ранг i=1 (строго слева направо)
+        i1_1 [label="Злиття [19] та [75]\n[19, 75]"];
+        i1_2 [label="Злиття [43] та [31]\n[31, 43]"];
+        i1_3 [label="Злиття [5] та [66]\n[5, 66]"];
+        i1_4 [label="Злиття [62] та [34]\n[34, 62]"];
+        i1_5 [label="Залишок\n[76]", fillcolor=khaki1];
+
+        { rank = same; i1_1; i1_2; i1_3; i1_4; i1_5; }
+        
+        i1_1 -> i1_2 [style=invis];
+        i1_2 -> i1_3 [style=invis];
+        i1_3 -> i1_4 [style=invis];
+        i1_4 -> i1_5 [style=invis];
+
+        i2_1 [label="Злиття [19, 75] та [31, 43]\n[19, 31, 43, 75]"];
+        i2_2 [label="Злиття [5, 66] та [34, 62]\n[5, 34, 62, 66]"];
+
+        { rank = same; i2_1; i2_2; }
+        i2_1 -> i2_2 [style=invis];
+        
+        i4_1 [label="Злиття [19, 31, 43, 75] та [5, 34, 62, 66]\n[5, 19, 31, 34, 43, 62, 66, 75]"];
+
+        final_iter [label="Фінальне злиття [5, 19, 31, 34, 43, 62, 66, 75] та [76]\n[5, 19, 31, 34, 43, 62, 66, 75, 76]", fillcolor=green];
+
+        init_iter -> i1_1;
+        init_iter -> i1_2;
+        init_iter -> i1_3;
+        init_iter -> i1_4;
+        init_iter -> i1_5;
+
+        {i1_1; i1_2} -> i2_1;
+        {i1_3; i1_4} -> i2_2;
+        
+        {i2_1; i2_2} -> i4_1;
+        
+        {i4_1; i1_5} -> final_iter;
+    }
+
+    subgraph cluster_recursive {
+        label = "б) Рекурсивна версія (Merge Sort)";
+        color = lightgrey;
+        node [fillcolor=aliceblue];
+        
+        root [label="Початковий виклик\n[19, 75, 43, 31, 5, 66, 62, 34, 76]", fillcolor=lightblue];
+        
+        subgraph cluster_divide {
+            label = "Етап розділення";
+            style = dashed;
+            color = gray;
+            
+            d1_l [label="[19, 75, 43, 31]"];
+            d1_r [label="[5, 66, 62, 34, 76]"];
+            
+            d2_1 [label="[19, 75]"];
+            d2_2 [label="[43, 31]"];
+            d2_3 [label="[5, 66]"];
+            d2_4 [label="[62, 34, 76]"];
+            
+            e19 [label="[19]", fillcolor=khaki1];
+            e75 [label="[75]", fillcolor=khaki1];
+            e43 [label="[43]", fillcolor=khaki1];
+            e31 [label="[31]", fillcolor=khaki1];
+            e5  [label="[5]", fillcolor=khaki1];
+            e66 [label="[66]", fillcolor=khaki1];
+            e62 [label="[62]", fillcolor=khaki1];
+            d3_sub [label="[34, 76]"];
+            e34 [label="[34]", fillcolor=khaki1];
+            e76 [label="[76]", fillcolor=khaki1];
+        }
+
+        root -> d1_l [label="ліва частина"];
+        root -> d1_r [label="права частина"];
+        
+        d1_l -> d2_1;
+        d1_l -> d2_2;
+        d1_r -> d2_3;
+        d1_r -> d2_4;
+        
+        d2_1 -> e19;
+        d2_1 -> e75;
+        d2_2 -> e43;
+        d2_2 -> e31;
+        
+        d2_3 -> e5;
+        d2_3 -> e66;
+        d2_4 -> e62;
+        d2_4 -> d3_sub;
+        
+        d3_sub -> e34;
+        d3_sub -> e76;
+
+        subgraph cluster_conquer {
+            label = "Етап злиття";
+            style = dashed;
+            color = gray;
+            
+            m1_1 [label="[19, 75]"];
+            m1_2 [label="[31, 43]"];
+            m1_3 [label="[5, 66]"];
+            m1_4 [label="[34, 76]"];
+            
+            m2_1 [label="[19, 31, 43, 75]"];
+            m2_2 [label="[34, 62, 76]"];
+            m2_3 [label="[5, 34, 62, 66, 76]"];
+            
+            final_rec [label="[5, 19, 31, 34, 43, 62, 66, 75, 76]", fillcolor=green];
+        }
+
+        {e19; e75} -> m1_1 [style=dotted];
+        {e43; e31} -> m1_2 [style=dotted];
+        {e5; e66} -> m1_3 [style=dotted];
+        {e34; e76} -> m1_4 [style=dotted];
+        
+        {m1_1; m1_2} -> m2_1;
+        {e62; m1_4} -> m2_2 [style=dotted];
+        {m1_3; m2_2} -> m2_3;
+        
+        {m2_1; m2_3} -> final_rec;
+    }
+}
